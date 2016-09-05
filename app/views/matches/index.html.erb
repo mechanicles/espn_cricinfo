@@ -1,30 +1,13 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Matches</h1>
-
 <table>
-  <thead>
-    <tr>
-      <th>Team1</th>
-      <th>Team2</th>
-      <th>Total run for team1</th>
-      <th>Out count for team1</th>
-      <th>Total run for team2</th>
-      <th>Out count for team2</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
   <tbody>
     <% @matches.each do |match| %>
       <tr>
-        <td><%= match.team1 %></td>
-        <td><%= match.team2 %></td>
-        <td><%= match.total_run_for_team1 %></td>
-        <td><%= match.out_count_for_team1 %></td>
-        <td><%= match.total_run_for_team2 %></td>
-        <td><%= match.out_count_for_team2 %></td>
-        <td><%= link_to 'Show', match %></td>
+        <td><%= match.team1 %> vs <%= match.team2 %></td>
+        <td>Total Run for <%= match.team1 %> : <%= match.total_run_for_team1 %></td>
+        <td>Total Run for <%= match.team2 %> : <%= match.out_count_for_team2 %></td>
         <td><%= link_to 'Edit', edit_match_path(match) %></td>
         <td><%= link_to 'Destroy', match, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

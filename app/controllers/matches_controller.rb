@@ -28,8 +28,8 @@ class MatchesController < ApplicationController
 
     respond_to do |format|
       if @match.save
-        format.html { redirect_to @match, notice: 'Match was successfully created.' }
-        format.json { render :show, status: :created, location: @match }
+        format.html { redirect_to edit_match_path(@match), notice: 'Match was successfully created.' }
+        format.json { render :edit, status: :created, location: @match }
       else
         format.html { render :new }
         format.json { render json: @match.errors, status: :unprocessable_entity }
@@ -42,7 +42,7 @@ class MatchesController < ApplicationController
   def update
     respond_to do |format|
       if @match.update(match_params)
-        format.html { redirect_to @match, notice: 'Match was successfully updated.' }
+        format.html { redirect_to edit_match_path(@match), notice: 'Match was successfully updated.' }
         format.json { render :show, status: :ok, location: @match }
       else
         format.html { render :edit }
@@ -69,6 +69,11 @@ class MatchesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def match_params
-      params.require(:match).permit(:team1, :team2, :total_run_for_team1, :out_count_for_team1, :total_run_for_team2, :out_count_for_team2)
+      params.require(:match).permit(:team1, :team2, :total_run_for_team1,
+                                    :out_count_for_team1,
+                                    :total_run_for_team2,
+                                    :out_count_for_team2,
+                                    :first_batting_team,
+                                    :current_status)
     end
 end

@@ -11,37 +11,28 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :team1 %>
-    <%= f.text_field :team1 %>
-  </div>
-
-  <div class="field">
-    <%= f.label :team2 %>
-    <%= f.text_field :team2 %>
-  </div>
-
-  <div class="field">
-    <%= f.label :total_run_for_team1 %>
-    <%= f.number_field :total_run_for_team1 %>
-  </div>
-
-  <div class="field">
-    <%= f.label :out_count_for_team1 %>
-    <%= f.number_field :out_count_for_team1 %>
-  </div>
-
-  <div class="field">
-    <%= f.label :total_run_for_team2 %>
-    <%= f.number_field :total_run_for_team2 %>
-  </div>
-
-  <div class="field">
-    <%= f.label :out_count_for_team2 %>
-    <%= f.number_field :out_count_for_team2 %>
-  </div>
-
+  <% if match.new_record? %>
+    <div class="field">
+      <%= f.label :team1 %>
+      <%= f.select :team1, Match::CRICKET_TEAMS %>
+    </div>
+    <div class="field">
+      <%= f.label :team2 %>
+      <%= f.select :team2, Match::CRICKET_TEAMS %>
+    </div>
+    <div class="field">
+      <%= f.label "First batting team" %>
+      <%= f.select :first_batting_team, Match::CRICKET_TEAMS %>
+    </div>
+  <% else %>
+    <div class="field">
+      <%= match.current_match_status %>
+    </div>
+    <div class="field">
+      <%= f.label "Current Status"%> <%= f.select :current_status, Match::CURRENT_STATUSES %>
+    </div>
+  <% end %>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit match.new_record? ? "Add match" : "Update match record" %>
   </div>
 <% end %>
