@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  team1: MyString
+  team2: MyString
+  total_run_for_team1: 1
+  out_count_for_team1: 1
+  total_run_for_team2: 1
+  out_count_for_team2: 1
+
+two:
+  team1: MyString
+  team2: MyString
+  total_run_for_team1: 1
+  out_count_for_team1: 1
+  total_run_for_team2: 1
+  out_count_for_team2: 1
