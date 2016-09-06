@@ -10,6 +10,9 @@ class MatchesController < ApplicationController
   # GET /matches/1
   # GET /matches/1.json
   def show
+    respond_to do |format|
+      format.json { render json: @match.to_json }
+    end
   end
 
   # GET /matches/new
@@ -42,6 +45,7 @@ class MatchesController < ApplicationController
   def update
     respond_to do |format|
       if @match.update(match_params)
+        MatchScoreService.new(@match.id).publish
         format.html { redirect_to edit_match_path(@match), notice: 'Match was successfully updated.' }
         format.json { render :show, status: :ok, location: @match }
       else

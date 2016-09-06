@@ -4,11 +4,13 @@ class MatchScoreService
   attr_reader :match
 
   def initialize(match_id)
-    @match = Match.find_by match_id
+    @match = Match.find_by id: match_id
   end
 
   def publish
-    channel.default_exchange.publish(payload, routing_key: queue.name)
+    return if @match.nil?
+
+    channel.default_exchange.publish(payload, routing_key: queue.name, persistent: true)
     connection.close
   end
 
@@ -34,6 +36,6 @@ class MatchScoreService
   end
 
   def queue
-    @queue ||= channel.queue("match-#{match.id}")
+    @queue ||= channel.queue("match-#{match.id}", durable: true)
   end
 end
