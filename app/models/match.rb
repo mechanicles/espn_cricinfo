@@ -21,58 +21,52 @@ class Match < ApplicationRecord
 
   before_update :handle_current_state
 
+  def as_json(options={})
+    {
+      title: self.to_s,
+      current_batting_team_score: current_batting_team_score,
+      first_batting_team_score: first_batting_team_score,
+    }
+  end
+
   def to_s
     "#{team1} v #{team2}"
   end
 
+  def first_batting_team_score
+    data = {}
+
+    if current_batting_team_score[:name] != team1
+      data[:name]       = team1
+      data[:total_runs] = total_run_for_team1
+      data[:total_out]  = out_count_for_team1
+      data[:played]     = (out_count_for_team1 == TOTAL_PLAYER_IN_TEAM)
+    else
+      data[:name]       = team2
+      data[:total_runs] = total_run_for_team2
+      data[:total_out]  = out_count_for_team2
+      data[:played]     = (out_count_for_team1 == TOTAL_PLAYER_IN_TEAM)
+    end
+
+    data
+  end
+
   def current_match_status
-    "#{current_batting_team} : #{current_team_runs}/#{current_team_out_count}"
+    "#{current_batting_team_score[:name]} : #{current_batting_team_score[:total_runs]}/#{current_batting_team_score[:total_out]}"
   end
 
-  def current_batting_team
+  def current_batting_team_score
     if first_batting_team == team1
       if out_count_for_team1 < TOTAL_PLAYER_IN_TEAM
-        team1
+        { name: team1, total_runs: total_run_for_team1, total_out: out_count_for_team1}
       else
-        team2
+        { name: team2, total_runs: total_run_for_team2, total_out: out_count_for_team2}
       end
     else
       if out_count_for_team1 < TOTAL_PLAYER_IN_TEAM
-        team2
+        { name: team2, total_runs: total_run_for_team2, total_out: out_count_for_team2}
       else
-        team1
-      end
-    end
-  end
-
-  def current_team_runs
-    if first_batting_team == team1
-      if out_count_for_team1 < TOTAL_PLAYER_IN_TEAM
-        total_run_for_team1
-      else
-        total_run_for_team2
-      end
-    else
-      if out_count_for_team1 < TOTAL_PLAYER_IN_TEAM
-        total_run_for_team2
-      else
-        total_run_for_team1
-      end
-    end
-  end
-
-  def current_team_out_count
-    if first_batting_team == team1
-      if out_count_for_team1 < TOTAL_PLAYER_IN_TEAM
-        out_count_for_team1
-      else
-        out_count_for_team2
-      end
-    else
-      if out_count_for_team1 < TOTAL_PLAYER_IN_TEAM
-        out_count_for_team2
-      else
-        out_count_for_team1
+        { name: team1, total_runs: total_run_for_team1, total_out: out_count_for_team1}
       end
     end
   end
