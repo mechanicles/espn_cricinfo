@@ -80,7 +80,8 @@ class Match < ApplicationRecord
   end
 
   def current_match_status
-    "#{current_batting_team_score[:name]} : #{current_batting_team_score[:total_runs]}/#{current_batting_team_score[:total_out]}"
+    "#{current_batting_team_score[:name]} : #{current_batting_team_score[:total_runs]}-runs/" \
+      "#{current_batting_team_score[:total_out]}-out"
   end
 
   private

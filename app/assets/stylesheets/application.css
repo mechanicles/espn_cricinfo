@@ -13,3 +13,18 @@
  *= require_tree .
  *= require_self
  */
+
+
+h1 a.logo {
+  text-decoration: none;
+  color: #333;
+  background-color: white;
+}
+
+p#notice {
+  margin: 0px;
+}
+
+.green-color {
+  color: green;
+}

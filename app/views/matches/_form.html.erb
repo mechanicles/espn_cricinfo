@@ -25,11 +25,13 @@
       <%= f.select :first_batting_team, Match::CRICKET_TEAMS %>
     </div>
   <% else %>
-    <div class="field">
-      <%= match.current_match_status %>
+    <div class="field green-color">
+      <b>
+        <%= match.current_match_status %>
+      </b>
     </div>
     <div class="field">
-      <%= f.label "Current Status"%> <%= f.select :current_status, Match::CURRENT_STATUSES %>
+      <%= f.label "Current Status (Run/Out)"%> <%= f.select :current_status, Match::CURRENT_STATUSES %>
     </div>
   <% end %>
   <div class="actions">

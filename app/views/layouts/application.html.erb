@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>EspnCricinfo</title>
+    <title>ESPNcricinfo</title>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -9,6 +9,12 @@
   </head>
 
   <body>
+    <h1 class="logo">
+      <%= link_to root_path, class: "logo" do %>
+        ESPNcricinfo Admin
+      <% end %>
+    </h1>
+    <hr />
     <%= yield %>
   </body>
 </html>
