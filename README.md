@@ -6,3 +6,11 @@ publish those data to another [microservice](https://github.com/mechanicles/espn
 This [microservice](https://github.com/mechanicles/espn_cricinfo_frontend) acts as
 a subscriber to our system. Users will use this microservice to get the real
 time data updates on their browser.
+
+#### Setup
+
+- Install [RabbitMQ](https://www.rabbitmq.com/download.html) and run it in
+  background.
+- Create & migrate database using Rails commands.
+
+
