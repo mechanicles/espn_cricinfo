@@ -1,9 +1,26 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Matches</h1>
+<h1>Live Scores</h1>
 <table>
   <tbody>
-    <% @matches.each do |match| %>
+    <% @live_matches.each do |match| %>
+      <tr>
+        <td><%= match.team1 %> vs <%= match.team2 %></td>
+        <td>Total Run for <%= match.team1 %> : <%= match.total_run_for_team1 %></td>
+        <td>Total Run for <%= match.team2 %> : <%= match.out_count_for_team2 %></td>
+        <td><%= link_to 'Edit', edit_match_path(match) %></td>
+        <td><%= link_to 'Destroy', match, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<h1>Previous Match Scores</h1>
+<table>
+  <tbody>
+    <% @previous_matches.each do |match| %>
       <tr>
         <td><%= match.team1 %> vs <%= match.team2 %></td>
         <td>Total Run for <%= match.team1 %> : <%= match.total_run_for_team1 %></td>

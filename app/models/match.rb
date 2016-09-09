@@ -22,6 +22,9 @@ class Match < ApplicationRecord
 
   before_update :handle_current_state, :set_end_result
 
+  scope :live, -> { where(end_result: nil) }
+  scope :previous, -> { where.not(end_result: "") }
+
   def as_json(options={})
     {
       id: id,
