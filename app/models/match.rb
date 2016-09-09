@@ -27,8 +27,8 @@ class Match < ApplicationRecord
       id: id,
       title: self.to_s,
       first_batting_team: first_batting_team,
-      current_batting_team_score: current_batting_team_score,
-      first_batting_team_score: first_batting_team_score,
+      current_batting_team_info: current_batting_team_info,
+      first_batting_team_info: first_batting_team_info,
       end_result: end_result
     }
   end
@@ -37,53 +37,68 @@ class Match < ApplicationRecord
     "#{team1} v #{team2}"
   end
 
-  def first_batting_team_score
+  def first_batting_team_info
     data = {}
 
-    if current_batting_team_score[:name] != team1
+    if current_batting_team_info[:name] != team1
       data[:name]       = team1
       data[:total_runs] = total_run_for_team1
       data[:total_out]  = out_count_for_team1
       data[:played]     = (out_count_for_team1 == TOTAL_PLAYER_IN_TEAM)
+      data[:status]     = team_status(team1, total_run_for_team1, out_count_for_team1)
     else
       data[:name]       = team2
       data[:total_runs] = total_run_for_team2
       data[:total_out]  = out_count_for_team2
       data[:played]     = (out_count_for_team1 == TOTAL_PLAYER_IN_TEAM)
+      data[:status]     = team_status(team2, total_run_for_team2, out_count_for_team2)
     end
 
     data
   end
 
-  def current_batting_team_score
+  def current_batting_team_info
     # Confusing code :) Need to refactor
 
     if first_batting_team == team1
       if out_count_for_team1 < TOTAL_PLAYER_IN_TEAM
         { name: team1,
           total_runs: total_run_for_team1,
-          total_out: out_count_for_team1 }
+          total_out: out_count_for_team1,
+          status: team_status(team1, total_run_for_team1, out_count_for_team1)
+        }
       else
         { name: team2,
           total_runs: total_run_for_team2,
-          total_out: out_count_for_team2 }
+          total_out: out_count_for_team2,
+          status: team_status(team2, total_run_for_team2, out_count_for_team2)
+        }
       end
     else
       if out_count_for_team2 < TOTAL_PLAYER_IN_TEAM
         { name: team2,
           total_runs: total_run_for_team2,
-          total_out: out_count_for_team2 }
+          total_out: out_count_for_team2,
+          status: team_status(team2, total_run_for_team2, out_count_for_team2)
+        }
       else
         { name: team1,
           total_runs: total_run_for_team1,
-          total_out: out_count_for_team1 }
+          total_out: out_count_for_team1,
+          status: team_status(team1, total_run_for_team1, out_count_for_team1)
+        }
       end
     end
   end
 
   def current_match_status
-    "#{current_batting_team_score[:name]} : #{current_batting_team_score[:total_runs]}-runs/" \
-      "#{current_batting_team_score[:total_out]}-out"
+    team_status(current_batting_team_info[:name],
+                current_batting_team_info[:total_runs],
+                current_batting_team_info[:total_out])
+  end
+
+  def team_status(team, team_total_runs, team_out_count)
+    "#{team} #{team_total_runs}-#{team_out_count}"
   end
 
   private
@@ -101,7 +116,7 @@ class Match < ApplicationRecord
   end
 
   def handle_current_state
-    if current_batting_team_score[:name] == team1
+    if current_batting_team_info[:name] == team1
       if current_status == "out"
         self.out_count_for_team1 += 1
       else
