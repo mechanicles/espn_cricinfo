@@ -20,14 +20,16 @@ class Match < ApplicationRecord
   validate :team1_and_team2_should_not_be_same
   validates :out_count_for_team1, :out_count_for_team2, numericality: { less_than_or_equal_to: 10 }
 
-  before_update :handle_current_state
+  before_update :handle_current_state, :set_end_result
 
   def as_json(options={})
     {
       id: id,
       title: self.to_s,
+      first_batting_team: first_batting_team,
       current_batting_team_score: current_batting_team_score,
       first_batting_team_score: first_batting_team_score,
+      end_result: end_result
     }
   end
 
@@ -111,6 +113,19 @@ class Match < ApplicationRecord
       else
         self.total_run_for_team2 += current_status.to_i
       end
+    end
+  end
+
+  def set_end_result
+    if out_count_for_team1 == TOTAL_PLAYER_IN_TEAM && out_count_for_team2 == TOTAL_PLAYER_IN_TEAM
+      self.end_result = if total_run_for_team1 > total_run_for_team2
+                          "#{team1} won"
+                        elsif total_run_for_team1 < total_run_for_team2
+                          "#{team2} won"
+                        else
+                          "Tied"
+                        end
+
     end
   end
 end
