@@ -10,7 +10,8 @@ class MatchScoreService
   def publish
     return if @match.nil?
 
-    channel.default_exchange.publish(payload, routing_key: queue.name, persistent: true)
+    exchange = channel.fanout("match_scores")
+    exchange.publish(payload, routing_key: queue.name, persistent: true)
     connection.close
   end
 
