@@ -47,7 +47,7 @@ RSpec.describe Match, type: :model do
 
   context "scope methods" do
     it 'should return live matches' do
-      @match.save
+      @match.save!
       expect(Match.live).to include(@match)
     end
 
@@ -58,7 +58,7 @@ RSpec.describe Match, type: :model do
 
   context "instance methods" do
     it "should return json object if invoke to 'to_json' method on an object" do
-      @match.save
+      @match.save!
       expect(JSON.parse(@match.to_json).keys).to eql(["id", "title", "first_batting_team",
                                                       "current_batting_team_info",
                                                       "first_batting_team_info",
@@ -75,36 +75,35 @@ RSpec.describe Match, type: :model do
     end
 
     it "returns required info if we invoke 'current_batting_team_info' method on an object" do
-      @match.save
+      @match.save!
       data = {:name=>"Australia", :total_runs=>201, :total_out=>5, :status=>"Australia 201-5"}
       expect(@match.current_batting_team_info).to eql(data)
     end
 
     it "should return current satus for given match object" do
-      @match.save
+      @match.save!
       expect(@match.current_match_status).to eql("Australia 201-5")
     end
 
     it "should return current satus for given match object" do
-      @match.save
+      @match.save!
       expect(@match.current_match_status).to eql("Australia 201-5")
     end
 
     it "should return team1 status" do
-      @match.save
+      @match.save!
       expect(@match.team1_status).to eql("India 200-10")
     end
 
     it "should return team2 status" do
-      @match.save
+      @match.save!
       expect(@match.team2_status).to eql("Australia 201-5")
     end
 
     it "should tell that give match is completed or not" do
-      @match.save
+      @match.save!
       expect(@match.completed?).to eql(false)
 
-      @completed_match.save
       expect(@completed_match.completed?).to eql(true)
     end
   end

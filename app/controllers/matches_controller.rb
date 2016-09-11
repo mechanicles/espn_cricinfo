@@ -4,6 +4,7 @@ class MatchesController < ApplicationController
   # GET /matches
   # GET /matches.json
   def index
+    puts "haha"
     @live_matches = Match.live
     @previous_matches = Match.previous
   end
