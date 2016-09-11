@@ -29,7 +29,7 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-gem "bunny", ">= 2.5.1"
+gem "bunny", ">= 2.5.1", require: false
 
 gem 'rails_12factor', group: :production
 
