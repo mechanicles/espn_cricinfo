@@ -35,6 +35,6 @@
     </div>
   <% end %>
   <div class="actions">
-    <%= f.submit match.new_record? ? "Add match" : "Update match record" %>
+    <%= f.submit match.new_record? ? "Add match" : "Update match record", disabled: match.completed? %>
   </div>
 <% end %>

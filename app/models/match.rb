@@ -19,6 +19,7 @@ class Match < ApplicationRecord
   validate :first_batting_team_should_be_team1_or_team2
   validate :team1_and_team2_should_not_be_same
   validates :out_count_for_team1, :out_count_for_team2, numericality: { less_than_or_equal_to: 10 }
+  validate :updating, if: :completed?, on: :update
 
   before_update :handle_current_state, :set_end_result
 
@@ -104,6 +105,18 @@ class Match < ApplicationRecord
     "#{team} #{team_total_runs}-#{team_out_count}"
   end
 
+  def team1_status
+    "#{team1} #{total_run_for_team1}-#{out_count_for_team1}"
+  end
+
+  def team2_status
+    "#{team2} #{total_run_for_team2}-#{out_count_for_team2}"
+  end
+
+  def completed?
+    end_result.present?
+  end
+
   private
 
   def team1_and_team2_should_not_be_same
@@ -145,5 +158,9 @@ class Match < ApplicationRecord
                         end
 
     end
+  end
+
+  def updating
+    errors.add(:base, "Can't update. Match is completed already!!!.")
   end
 end
