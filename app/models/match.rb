@@ -15,9 +15,16 @@ class Match < ApplicationRecord
     "West Indies",
   ]
 
-  validates :team1, :team1, :first_batting_team, presence: true
-  validate :first_batting_team_should_be_team1_or_team2
-  validate :team1_and_team2_should_not_be_same
+  validates :team1, :team2, :first_batting_team, presence: true
+
+  validate :team1_and_team2_should_not_be_same, if: Proc.new { |match|
+    match.team1.present? && match.team2.present?
+  }
+
+  validate :first_batting_team_should_be_team1_or_team2, if: Proc.new { |match|
+    match.team1.present? && match.team2.present? && match.first_batting_team.present?
+  }
+
   validates :out_count_for_team1, :out_count_for_team2, numericality: { less_than_or_equal_to: 10 }
   validate :updating, if: :completed?, on: :update
 
@@ -126,9 +133,13 @@ class Match < ApplicationRecord
   end
 
   def first_batting_team_should_be_team1_or_team2
-    if ![team1.downcase, team2.downcase].include? first_batting_team.downcase
+    if ![team1.try(:downcase), team2.try(:downcase)].include? first_batting_team.try(:downcase)
       errors.add(:first_batting_team, "should be either team1 or team2")
     end
+  end
+
+  def updating
+    errors.add(:base, "Can't update. Match is completed already!!!.")
   end
 
   def handle_current_state
@@ -158,9 +169,5 @@ class Match < ApplicationRecord
                         end
 
     end
-  end
-
-  def updating
-    errors.add(:base, "Can't update. Match is completed already!!!.")
   end
 end
