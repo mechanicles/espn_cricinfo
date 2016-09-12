@@ -1,4 +1,4 @@
-### ESPN Cricket Live Score Example using RabbitMQ. [Publisher/Producer Microservice]
+### Cricket Live Score Example using RabbitMQ. [Publisher/Producer Microservice]
 
 In this microservice, we (admin) actually adds live match record (score) into
 the database and immediately we also publish that score to another microservice
@@ -12,6 +12,7 @@ match updates on their browser.
 
 - Install [RabbitMQ](https://www.rabbitmq.com/download.html) and run it in
   background.
+- Install **Web-Stomp** by enabling it using `rabbitmq-plugins enable rabbitmq_web_stomp`
 - Create & migrate database using Rails commands.
 
 #### Demo
