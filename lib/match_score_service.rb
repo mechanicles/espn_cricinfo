@@ -8,21 +8,17 @@ class MatchScoreService
   end
 
   def publish
-    return if @match.nil?
+    return if match.nil?
 
     exchange = channel.fanout("match_scores")
     exchange.publish(payload, routing_key: queue.name, persistent: true)
     connection.close
   end
 
-  def payload
-    @match.to_json
-  end
-
   private
 
   def payload
-    @match.to_json
+    match.to_json
   end
 
   def connection
