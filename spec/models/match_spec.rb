@@ -43,6 +43,13 @@ RSpec.describe Match, type: :model do
       @completed_match.update(total_run_for_team1: 220)
       expect(@completed_match.errors[:base]).to include("Can't update. Match is completed already!!!.")
     end
+
+    it 'should not create a match if team is already playing' do
+      new_match = @match.dup
+      @match.save!
+      new_match.save
+      expect(new_match.errors[:base]).to include("Can't create. One of the teams is already playing!!!.")
+    end
   end
 
   context "scope methods" do

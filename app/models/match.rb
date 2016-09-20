@@ -27,6 +27,7 @@ class Match < ApplicationRecord
 
   validates :out_count_for_team1, :out_count_for_team2, numericality: { less_than_or_equal_to: 10 }
   validate :updating, if: :completed?, on: :update
+  validate :team_is_already_playing, on: :create
 
   before_update :handle_current_state, :set_end_result
 
@@ -140,6 +141,14 @@ class Match < ApplicationRecord
 
   def updating
     errors.add(:base, "Can't update. Match is completed already!!!.")
+  end
+
+  def team_is_already_playing
+    match_teams = [team1, team2]
+
+    if self.class.live.where("team1 IN (?) OR team2 IN (?)", match_teams, match_teams).present?
+      errors.add(:base, "Can't create. One of the teams is already playing!!!.")
+    end
   end
 
   def handle_current_state
