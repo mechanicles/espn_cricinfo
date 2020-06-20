@@ -38,12 +38,12 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    amq-protocol (2.3.0)
+    amq-protocol (2.3.1)
     arel (7.1.4)
     bindex (0.8.1)
     builder (3.2.4)
-    bunny (2.14.3)
-      amq-protocol (~> 2.3, >= 2.3.0)
+    bunny (2.15.0)
+      amq-protocol (~> 2.3, >= 2.3.1)
     byebug (11.0.1)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
@@ -187,7 +187,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bunny (>= 2.5.1)
+  bunny (>= 2.14.1)
   byebug
   coffee-rails (~> 4.2)
   dotenv-rails

@@ -1,4 +1,6 @@
-require "bunny"
+# frozen_string_literal: true
+
+require 'bunny'
 
 class MatchScoreService
   attr_reader :match
@@ -10,7 +12,7 @@ class MatchScoreService
   def publish
     return if match.nil?
 
-    exchange = channel.direct("match_scores")
+    exchange = channel.direct('match_scores')
     exchange.publish(payload, routing_key: queue.name, persistent: true)
     connection.close
   end
@@ -22,8 +24,9 @@ class MatchScoreService
   end
 
   def connection
-    @conn ||= begin
-                conn = Bunny.new(ENV["CLOUDAMQP_URL"].presence)
+    @connection ||= begin
+                # conn = Bunny.new(ENV['CLOUDAMQP_URL'].presence)
+                conn = Bunny.new(automatically_recover: false)
                 conn.start
               end
   end
