@@ -25,8 +25,7 @@ class MatchScoreService
 
   def connection
     @connection ||= begin
-                # conn = Bunny.new(ENV['CLOUDAMQP_URL'].presence)
-                conn = Bunny.new(automatically_recover: false)
+                conn = Bunny.new(ENV['CLOUDAMQP_URL'].presence, automatically_recover: false)
                 conn.start
               end
   end
