@@ -1,27 +1,29 @@
+# frozen_string_literal: true
+
 class Match < ApplicationRecord
   attr_accessor :current_status
 
-  CURRENT_STATUSES = [1,2,3,4,6, "out"]
+  CURRENT_STATUSES = [1, 2, 3, 4, 6, 'out'].freeze
   TOTAL_PLAYER_IN_TEAM = 10
 
   CRICKET_TEAMS = [
-    "Australia",
-    "India",
-    "England",
-    "Pakistan",
-    "New Zealand",
-    "South Africa",
-    "Sri Lanka",
-    "West Indies",
-  ]
+    'Australia',
+    'India',
+    'England',
+    'Pakistan',
+    'New Zealand',
+    'South Africa',
+    'Sri Lanka',
+    'West Indies'
+  ].freeze
 
   validates :team1, :team2, :first_batting_team, presence: true
 
-  validate :team1_and_team2_should_not_be_same, if: Proc.new { |match|
+  validate :team1_and_team2_should_not_be_same, if: proc { |match|
     match.team1.present? && match.team2.present?
   }
 
-  validate :first_batting_team_should_be_team1_or_team2, if: Proc.new { |match|
+  validate :first_batting_team_should_be_team1_or_team2, if: proc { |match|
     match.team1.present? && match.team2.present? && match.first_batting_team.present?
   }
 
@@ -34,10 +36,10 @@ class Match < ApplicationRecord
   scope :live, -> { where(end_result: nil).order(:created_at) }
   scope :previous, -> { where.not(end_result: nil).order(:created_at) }
 
-  def as_json(options={})
+  def as_json(_options = {})
     {
       id: id,
-      title: self.to_s,
+      title: to_s,
       first_batting_team: first_batting_team,
       current_batting_team_info: current_batting_team_info,
       first_batting_team_info: first_batting_team_info,
@@ -77,28 +79,24 @@ class Match < ApplicationRecord
         { name: team1,
           total_runs: total_run_for_team1,
           total_out: out_count_for_team1,
-          status: team_status(team1, total_run_for_team1, out_count_for_team1)
-        }
+          status: team_status(team1, total_run_for_team1, out_count_for_team1) }
       else
         { name: team2,
           total_runs: total_run_for_team2,
           total_out: out_count_for_team2,
-          status: team_status(team2, total_run_for_team2, out_count_for_team2)
-        }
+          status: team_status(team2, total_run_for_team2, out_count_for_team2) }
       end
     else
       if out_count_for_team2 < TOTAL_PLAYER_IN_TEAM
         { name: team2,
           total_runs: total_run_for_team2,
           total_out: out_count_for_team2,
-          status: team_status(team2, total_run_for_team2, out_count_for_team2)
-        }
+          status: team_status(team2, total_run_for_team2, out_count_for_team2) }
       else
         { name: team1,
           total_runs: total_run_for_team1,
           total_out: out_count_for_team1,
-          status: team_status(team1, total_run_for_team1, out_count_for_team1)
-        }
+          status: team_status(team1, total_run_for_team1, out_count_for_team1) }
       end
     end
   end
@@ -128,14 +126,12 @@ class Match < ApplicationRecord
   private
 
   def team1_and_team2_should_not_be_same
-    if team1 == team2
-      errors.add(:base, "Team1 and Team2 should not be same")
-    end
+    errors.add(:base, 'Team1 and Team2 should not be same') if team1 == team2
   end
 
   def first_batting_team_should_be_team1_or_team2
-    if ![team1.try(:downcase), team2.try(:downcase)].include? first_batting_team.try(:downcase)
-      errors.add(:first_batting_team, "should be either team1 or team2")
+    unless [team1.try(:downcase), team2.try(:downcase)].include? first_batting_team.try(:downcase)
+      errors.add(:first_batting_team, 'should be either team1 or team2')
     end
   end
 
@@ -146,20 +142,20 @@ class Match < ApplicationRecord
   def team_is_already_playing
     match_teams = [team1, team2]
 
-    if self.class.live.where("team1 IN (?) OR team2 IN (?)", match_teams, match_teams).present?
+    if self.class.live.where('team1 IN (?) OR team2 IN (?)', match_teams, match_teams).present?
       errors.add(:base, "Can't create. One of the teams is already playing!!!.")
     end
   end
 
   def handle_current_state
     if current_batting_team_info[:name] == team1
-      if current_status == "out"
+      if current_status == 'out'
         self.out_count_for_team1 += 1
       else
         self.total_run_for_team1 += current_status.to_i
       end
     else
-      if current_status == "out"
+      if current_status == 'out'
         self.out_count_for_team2 += 1
       else
         self.total_run_for_team2 += current_status.to_i
@@ -174,7 +170,7 @@ class Match < ApplicationRecord
                         elsif total_run_for_team1 < total_run_for_team2
                           "#{team2} won"
                         else
-                          "Tied"
+                          'Tied'
                         end
 
     end
